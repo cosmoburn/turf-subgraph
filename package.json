@@ -1,0 +1,16 @@
+{
+  "name": "turf-subgraph",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ turf-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ turf-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ turf-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 turf-subgraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.26.0",
+    "@graphprotocol/graph-ts": "0.24.1"
+  }
+}
