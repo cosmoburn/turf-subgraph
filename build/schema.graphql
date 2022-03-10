@@ -6,10 +6,20 @@ type Token @entity {
   createdAtTimestamp: BigInt!
   creator: User!
   owner: User!
+  transfers: [Transfer!]! @derivedFrom(field: "token")
 }
 
 type User @entity {
   id: ID!
   tokens: [Token!]! @derivedFrom(field: "owner")
   created: [Token!]! @derivedFrom(field: "creator")
+  transfersIn: [Transfer!]! @derivedFrom(field: "to")
+  transfersOut: [Transfer!]! @derivedFrom(field: "from")
+}
+
+type Transfer @entity {
+  id: ID!
+  from: User!
+  to: User!
+  token: Token!
 }
