@@ -103,6 +103,15 @@ export class Token extends Entity {
   set owner(value: string) {
     this.set("owner", Value.fromString(value));
   }
+
+  get transfers(): Array<string> {
+    let value = this.get("transfers");
+    return value!.toStringArray();
+  }
+
+  set transfers(value: Array<string>) {
+    this.set("transfers", Value.fromStringArray(value));
+  }
 }
 
 export class User extends Entity {
@@ -153,5 +162,87 @@ export class User extends Entity {
 
   set created(value: Array<string>) {
     this.set("created", Value.fromStringArray(value));
+  }
+
+  get transfersIn(): Array<string> {
+    let value = this.get("transfersIn");
+    return value!.toStringArray();
+  }
+
+  set transfersIn(value: Array<string>) {
+    this.set("transfersIn", Value.fromStringArray(value));
+  }
+
+  get transfersOut(): Array<string> {
+    let value = this.get("transfersOut");
+    return value!.toStringArray();
+  }
+
+  set transfersOut(value: Array<string>) {
+    this.set("transfersOut", Value.fromStringArray(value));
+  }
+}
+
+export class Transfer extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("from", Value.fromString(""));
+    this.set("to", Value.fromString(""));
+    this.set("token", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Transfer entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Transfer entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Transfer", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Transfer | null {
+    return changetype<Transfer | null>(store.get("Transfer", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): string {
+    let value = this.get("from");
+    return value!.toString();
+  }
+
+  set from(value: string) {
+    this.set("from", Value.fromString(value));
+  }
+
+  get to(): string {
+    let value = this.get("to");
+    return value!.toString();
+  }
+
+  set to(value: string) {
+    this.set("to", Value.fromString(value));
+  }
+
+  get token(): string {
+    let value = this.get("token");
+    return value!.toString();
+  }
+
+  set token(value: string) {
+    this.set("token", Value.fromString(value));
   }
 }
