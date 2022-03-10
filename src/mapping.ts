@@ -3,9 +3,12 @@ import {
   Turf as TokenContract,
 } from "../generated/Turf/Turf";
 
-import { Token, User } from "../generated/schema";
+import {Transfer, Token, User} from "../generated/schema";
 
 export function handleTransfer(event: TransferEvent): void {
+  const transfer = new Transfer(
+    event.transaction.hash.toHexString() + "-" + event.logIndex.toString()
+  );
   let token = Token.load(event.params.tokenId.toString());
   if (!token) {
     token = new Token(event.params.tokenId.toString());
@@ -20,9 +23,20 @@ export function handleTransfer(event: TransferEvent): void {
   token.owner = event.params.to.toHexString();
   token.save();
 
+  let fromUser = User.load(event.params.from.toHexString());
+  if (!fromUser) {
+    fromUser = new User(event.params.from.toHexString());
+    fromUser.save();
+  }
+
   let user = User.load(event.params.to.toHexString());
   if (!user) {
     user = new User(event.params.to.toHexString());
     user.save();
   }
+
+  transfer.token = token.id;
+  transfer.to = user.id;
+  transfer.from = fromUser.id;
+  transfer.save();
 }
